@@ -1,0 +1,54 @@
+import java.util.*;
+
+public class Main {
+    static void topologicalSort(int[][] graph, int n) {
+        int[] indegree = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (graph[i][j] == 1)
+                    indegree[j]++;
+            }
+        }
+
+        Queue<Integer> queue = new LinkedList<>();
+
+        for (int i = 0; i < n; i++) {
+            if (indegree[i] == 0)
+                queue.add(i);
+        }
+
+        int count = 0;
+
+        while (!queue.isEmpty()) {
+            int u = queue.poll();
+            System.out.print(u + " ");
+            count++;
+
+            for (int v = 0; v < n; v++) {
+                if (graph[u][v] == 1) {
+                    indegree[v]--;
+
+                    if (indegree[v] == 0)
+                        queue.add(v);
+                }
+            }
+        }
+
+        if (count != n)
+            System.out.println("Cycle detected");
+    }
+
+    public static void main(String[] args) {
+        int[][] graph = {
+            {0, 1, 1, 0, 0, 0},
+            {0, 0, 0, 1, 0, 0},
+            {0, 0, 0, 1, 1, 0},
+            {0, 0, 0, 0, 0, 1},
+            {0, 0, 0, 0, 0, 1},
+            {0, 0, 0, 0, 0, 0}
+        };
+
+        topologicalSort(graph, 6);
+    }
+}
