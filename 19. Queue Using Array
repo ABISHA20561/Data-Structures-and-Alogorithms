@@ -1,0 +1,34 @@
+public class Main {
+    static int[] queue = new int[5];
+    static int front = 0, rear = -1;
+
+    static void enqueue(int value) {
+        if (rear == queue.length - 1) {
+            System.out.println("Queue Overflow");
+        } else {
+            queue[++rear] = value;
+        }
+    }
+
+    static void dequeue() {
+        if (front > rear) {
+            System.out.println("Queue Underflow");
+        } else {
+            System.out.println("Deleted: " + queue[front++]);
+        }
+    }
+
+    static void display() {
+        for (int i = front; i <= rear; i++) {
+            System.out.print(queue[i] + " ");
+        }
+    }
+
+    public static void main(String[] args) {
+        enqueue(10);
+        enqueue(20);
+        enqueue(30);
+        dequeue();
+        display();
+    }
+}
