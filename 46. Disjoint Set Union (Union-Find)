@@ -1,0 +1,47 @@
+public class Main {
+    static int[] parent = new int[10];
+    static int[] rank = new int[10];
+
+    static void initialize(int n) {
+        for (int i = 0; i < n; i++)
+            parent[i] = i;
+    }
+
+    static int find(int x) {
+        if (parent[x] != x)
+            parent[x] = find(parent[x]);
+
+        return parent[x];
+    }
+
+    static void union(int x, int y) {
+        int a = find(x);
+        int b = find(y);
+
+        if (a == b)
+            return;
+
+        if (rank[a] < rank[b])
+            parent[a] = b;
+        else if (rank[a] > rank[b])
+            parent[b] = a;
+        else {
+            parent[b] = a;
+            rank[a]++;
+        }
+    }
+
+    public static void main(String[] args) {
+        initialize(7);
+
+        union(0, 1);
+        union(1, 2);
+        union(3, 4);
+        union(5, 6);
+        union(4, 5);
+
+        System.out.println(find(0) == find(2));
+        System.out.println(find(0) == find(6));
+        System.out.println(find(3) == find(6));
+    }
+}
