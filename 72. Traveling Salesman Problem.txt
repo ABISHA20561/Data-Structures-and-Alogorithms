@@ -1,0 +1,39 @@
+public class Main {
+    static int n = 4;
+    static int[][] cost = {
+        {0, 10, 15, 20},
+        {10, 0, 35, 25},
+        {15, 35, 0, 30},
+        {20, 25, 30, 0}
+    };
+
+    static int tsp(int mask, int pos, int[][] dp) {
+        if (mask == (1 << n) - 1)
+            return cost[pos][0];
+
+        if (dp[mask][pos] != -1)
+            return dp[mask][pos];
+
+        int ans = Integer.MAX_VALUE;
+
+        for (int city = 0; city < n; city++) {
+            if ((mask & (1 << city)) == 0) {
+                int newCost = cost[pos][city] +
+                    tsp(mask | (1 << city), city, dp);
+
+                ans = Math.min(ans, newCost);
+            }
+        }
+
+        return dp[mask][pos] = ans;
+    }
+
+    public static void main(String[] args) {
+        int[][] dp = new int[1 << n][n];
+
+        for (int i = 0; i < dp.length; i++)
+            java.util.Arrays.fill(dp[i], -1);
+
+        System.out.println("Minimum Cost: " + tsp(1, 0, dp));
+    }
+}
