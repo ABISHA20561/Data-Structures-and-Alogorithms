@@ -1,0 +1,74 @@
+import java.util.*;
+
+public class Main {
+    static class Edge {
+        int src, dest, weight;
+
+        Edge(int s, int d, int w) {
+            src = s;
+            dest = d;
+            weight = w;
+        }
+    }
+
+    static int find(int[] parent, int i) {
+        if (parent[i] != i)
+            parent[i] = find(parent, parent[i]);
+
+        return parent[i];
+    }
+
+    static void union(int[] parent, int[] rank, int x, int y) {
+        int a = find(parent, x);
+        int b = find(parent, y);
+
+        if (rank[a] < rank[b])
+            parent[a] = b;
+        else if (rank[a] > rank[b])
+            parent[b] = a;
+        else {
+            parent[b] = a;
+            rank[a]++;
+        }
+    }
+
+    public static void main(String[] args) {
+        int vertices = 4;
+
+        Edge[] edges = {
+            new Edge(0, 1, 10),
+            new Edge(0, 2, 6),
+            new Edge(0, 3, 5),
+            new Edge(1, 3, 15),
+            new Edge(2, 3, 4)
+        };
+
+        Arrays.sort(edges, Comparator.comparingInt(e -> e.weight));
+
+        int[] parent = new int[vertices];
+        int[] rank = new int[vertices];
+
+        for (int i = 0; i < vertices; i++)
+            parent[i] = i;
+
+        int total = 0;
+        int count = 0;
+
+        for (Edge e : edges) {
+            int x = find(parent, e.src);
+            int y = find(parent, e.dest);
+
+            if (x != y) {
+                System.out.println(e.src + " - " + e.dest + " : " + e.weight);
+                total += e.weight;
+                union(parent, rank, x, y);
+                count++;
+
+                if (count == vertices - 1)
+                    break;
+            }
+        }
+
+        System.out.println("Total Weight: " + total);
+    }
+}
